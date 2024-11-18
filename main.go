@@ -50,15 +50,14 @@ func main() {
 		}
 	}
 
-	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: logLevel}))
 	c := CorsAnywhere{
-		Log:            l,
+		Log:            slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: logLevel})),
 		RequireHeaders: requireHeaders,
 		RemoveHeaders:  removeHeaders,
 		MaxAge:         86400,
 	}
 
-	l.Info("listening", "port", port, "version", version)
+	c.Log.Info("listening", "port", port, "version", version)
 	if err := http.ListenAndServe(":"+port, c.Proxy()); err != nil {
 		slog.Error("listening error", "error", err)
 		os.Exit(1)
@@ -85,6 +84,9 @@ func (c CorsAnywhere) Proxy() http.Handler {
 			TLSHandshakeTimeout: 10 * time.Second,
 		},
 		ErrorLog: slog.NewLogLogger(c.Log.Handler(), slog.LevelError),
+		ErrorHandler: func(w http.ResponseWriter, r *http.Request, err error) {
+			c.handleError(w, r, err.Error())
+		},
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
