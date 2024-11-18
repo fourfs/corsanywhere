@@ -138,6 +138,7 @@ func (c CorsAnywhere) rewrite(r *httputil.ProxyRequest) {
 	}
 
 	if origin := r.In.Header.Get("X-Set-Origin"); origin != "" {
+		c.Log.DebugContext(r.In.Context(), "setting origin", "origin", origin)
 		r.Out.Header.Del("X-Set-Origin")
 		r.Out.Header.Set("Origin", origin)
 		r.Out.Header.Set("Referer", origin+"/")
