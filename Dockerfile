@@ -1,5 +1,3 @@
-LABEL authors="fourfs"
-
 ARG GO_VERSION
 ARG VERSION
 
