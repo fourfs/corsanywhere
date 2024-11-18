@@ -34,7 +34,7 @@ func main() {
 	if p := os.Getenv("PORT"); p != "" {
 		port = p
 	}
-	var requireHeaders []string
+	requireHeaders := []string{}
 	if rh := os.Getenv("REQUIRE_HEADERS"); rh != "" {
 		requireHeaders = strings.Split(rh, ",")
 	}
@@ -42,8 +42,15 @@ func main() {
 	if rh := os.Getenv("REMOVE_HEADERS"); rh != "" {
 		removeHeaders = strings.Split(rh, ",")
 	}
+	logLevel := slog.LevelInfo
+	if ll := os.Getenv("LOG_LEVEL"); ll != "" {
+		li, err := strconv.Atoi(ll)
+		if err != nil {
+			logLevel = slog.Level(li)
+		}
+	}
 
-	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: logLevel}))
 	c := CorsAnywhere{
 		Log:            l,
 		RequireHeaders: requireHeaders,
@@ -143,7 +150,7 @@ func (c CorsAnywhere) modifyResponse(r *http.Response) error {
 
 func (c CorsAnywhere) handleHome(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write([]byte("corsanywhere")); err != nil {
-		c.Log.ErrorContext(r.Context(), "error writing error response", "error", err)
+		c.Log.ErrorContext(r.Context(), "error writing home response", "error", err)
 	}
 }
 

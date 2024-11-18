@@ -39,9 +39,10 @@ curl localhost:8080/https://example.com
 
 Basic configuration is available through environment variables.
 
-- `PORT` (default `8080`)
 - `REQUIRE_HEADERS` (default `""`) - Comma-separated list of headers to require. Case-insensitive.
 - `REMOVE_HEADERS` (default `"Set-Cookie,Set-Cookie2"`) - Comma-separated list of headers to remove. Case-insensitive.
+- `PORT` (default `8080`)
+- `LOG_LEVEL` (default `0` - info) - Minimum [`log/slog`](https://pkg.go.dev/log/slog#Level) level to print.
 
 ## Contributing
 
