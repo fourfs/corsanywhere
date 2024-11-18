@@ -147,7 +147,7 @@ func handlePreflight(w http.ResponseWriter, r *http.Request, maxAge int) {
 		w.Header().Set("Access-Control-Allow-Methods", r.Header.Get("Access-Control-Request-Method"))
 	}
 	if r.Header.Get("Access-Control-Request-Headers") != "" {
-		w.Header().Set("Access-Control-Request-Headers", r.Header.Get("Access-Control-Request-Headers"))
+		w.Header().Set("Access-Control-Allow-Headers", r.Header.Get("Access-Control-Request-Headers"))
 	}
 	w.WriteHeader(http.StatusOK)
 }
