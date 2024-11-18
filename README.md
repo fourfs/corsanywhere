@@ -12,6 +12,14 @@ The binary requires the `Origin` header to be set and removes `Set-Cookie` heade
 
 The destination url is passed after `/` in the path. The protocol (`http`|`https`) is optional and defaults to `https`.
 
+### Run it with docker:
+
+```shell
+docker run -p 8080:8080 ghcr.io/fourfs/corsanywhere:latest
+```
+
+### Request from anywhere:
+
 ```shell
 curl -H Origin:https://example.com localhost:8080/https://example.com
 ```

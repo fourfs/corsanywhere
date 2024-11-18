@@ -1,11 +1,11 @@
-ARG GO_VERSION
-ARG VERSION
+ARG go_version
+ARG tag
 
-FROM golang:${GO_VERSION}-alpine AS build
+FROM golang:${go_version}-alpine AS build
 
 WORKDIR /
 COPY go.mod main.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-X main.version=${VERSION}" -o corsanywhere
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-X main.version=${tag}" -o corsanywhere
 
 FROM gcr.io/distroless/static
 

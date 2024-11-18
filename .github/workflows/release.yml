@@ -34,12 +34,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          build-args: |
+            go_version=${{ env.GO_VERSION }}
+            tag=${{ github.event.release.tag_name }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            GO_VERSION=${{ env.GO_VERSION }}
-            VERSION=${{ github.event.release.tag_name }}
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
