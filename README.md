@@ -4,7 +4,7 @@ Zero dependency go version of https://github.com/Rob--W/cors-anywhere.
 
 `corsanywhere` adds CORS headers to proxied requests on the fly, allowing you to bypass [existing CORS configuration](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/CORS).
 
-Distributed in GitHub container registry for convenience.
+Distributed in GitHub container registry [as a docker image](https://github.com/fourfs/corsanywhere/pkgs/container/corsanywhere) for convenience.
 
 ## Usage
 
