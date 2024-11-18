@@ -34,12 +34,20 @@ func main() {
 	if p := os.Getenv("PORT"); p != "" {
 		port = p
 	}
+	var requireHeaders []string
+	if rh := os.Getenv("REQUIRE_HEADERS"); rh != "" {
+		requireHeaders = strings.Split(rh, ",")
+	}
+	removeHeaders := []string{"Set-Cookie", "Set-Cookie2"}
+	if rh := os.Getenv("REMOVE_HEADERS"); rh != "" {
+		removeHeaders = strings.Split(rh, ",")
+	}
 
 	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	c := CorsAnywhere{
 		Log:            l,
-		RequireHeaders: nil,
-		RemoveHeaders:  []string{"Set-Cookie", "Set-Cookie2"},
+		RequireHeaders: requireHeaders,
+		RemoveHeaders:  removeHeaders,
 		MaxAge:         86400,
 	}
 
