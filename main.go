@@ -38,7 +38,7 @@ func main() {
 	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	c := CorsAnywhere{
 		Log:            l,
-		RequireHeaders: []string{"Origin"},
+		RequireHeaders: nil,
 		RemoveHeaders:  []string{"Set-Cookie", "Set-Cookie2"},
 		MaxAge:         86400,
 	}
@@ -118,6 +118,12 @@ func (c CorsAnywhere) rewrite(r *httputil.ProxyRequest) {
 
 	for _, h := range c.RemoveHeaders {
 		r.Out.Header.Del(h)
+	}
+
+	if origin := r.In.Header.Get("X-Set-Origin"); origin != "" {
+		r.Out.Header.Del("X-Set-Origin")
+		r.Out.Header.Set("Origin", origin)
+		r.Out.Header.Set("Referer", origin+"/")
 	}
 }
 
