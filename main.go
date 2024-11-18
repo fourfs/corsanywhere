@@ -59,7 +59,7 @@ type CorsAnywhere struct {
 
 func (c CorsAnywhere) Proxy() http.Handler {
 	proxy := httputil.ReverseProxy{
-		Director:       c.director,
+		Rewrite:        c.rewrite,
 		ModifyResponse: c.modifyResponse,
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -103,21 +103,21 @@ func (c CorsAnywhere) Proxy() http.Handler {
 	})
 }
 
-func (c CorsAnywhere) director(r *http.Request) {
-	u, err := url.Parse(trimURL(r.RequestURI))
+func (c CorsAnywhere) rewrite(r *httputil.ProxyRequest) {
+	u, err := url.Parse(trimURL(r.In.RequestURI))
 	if err != nil {
-		c.Log.ErrorContext(r.Context(), "director: failed to parse url", "url", r.RequestURI, "error", err)
+		c.Log.ErrorContext(r.In.Context(), "director: failed to parse url", "url", r.In.RequestURI, "error", err)
 		return
 	}
-	c.Log.DebugContext(r.Context(), "destination url", "url", u)
+	c.Log.DebugContext(r.In.Context(), "destination url", "url", u)
 
-	r.URL.Scheme = u.Scheme
-	r.URL.Host = u.Host
-	r.URL.Path = u.Path
-	r.Host = u.Host
+	r.Out.URL.Scheme = u.Scheme
+	r.Out.URL.Host = u.Host
+	r.Out.URL.Path = u.Path
+	r.Out.Host = u.Host
 
 	for _, h := range c.RemoveHeaders {
-		r.Header.Del(h)
+		r.Out.Header.Del(h)
 	}
 }
 
