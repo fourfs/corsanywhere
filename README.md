@@ -42,7 +42,10 @@ Basic configuration is available through environment variables.
 - `REQUIRE_HEADERS` (default `""`) - Comma-separated list of headers to require. Case-insensitive.
 - `REMOVE_HEADERS` (default `"Set-Cookie,Set-Cookie2"`) - Comma-separated list of headers to remove. Case-insensitive.
 - `PORT` (default `8080`)
-- `LOG_LEVEL` (default `0` - info) - Minimum [`log/slog`](https://pkg.go.dev/log/slog#Level) level to print.
+- `LOG_LEVEL` (default `0` - info) - Minimum [`log/slog` level](https://pkg.go.dev/log/slog#Level) to print.
+
+Intermediate proxies can be used through `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` variables.  
+Proxies will **not** be used with `localhost` destination urls ([net/http#ProxyFromEnvironment](https://pkg.go.dev/net/http#ProxyFromEnvironment)).
 
 ## Contributing
 
